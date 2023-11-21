@@ -1,0 +1,31 @@
+{% load static %}
+{% load crispy_forms_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %} My Project {% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'account/css/style.css' %}">
+    <!-- Add your CSS and other head elements here -->
+</head>
+<body>
+    <h2>This is coming from the base_generic.html</h2>
+    <header>
+        <!-- Add your header content here -->
+    </header>
+
+    <main>
+        {% block content %}
+        <!-- Default content for the block -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <!-- Add your footer content here -->
+    </footer>
+
+    <!-- Add your scripts and other body elements here -->
+
+</body>
+</html>
