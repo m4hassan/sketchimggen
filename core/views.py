@@ -10,6 +10,12 @@ import os
 
 os.environ["REPLICATE_API_TOKEN"] = "r8_Qh7fOYo4OpiJKo5wkKKFSLwLaj9DBtM2e9Nfo"
 
+def sd_view(request):
+    form = ImageUploadForm()
+    return render(request, 'core/stablediffusion.html', {'form': form})
+
+
+
 @login_required(login_url='/accounts/login/')
 def index(request):
     form = ImageUploadForm()

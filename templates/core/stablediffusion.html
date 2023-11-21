@@ -1,0 +1,160 @@
+{% load crispy_forms_tags %}
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta charset="utf-8">
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'core/css/newmain.css' %}"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'core/css/mainform.css' %}"> -->
+    <!-- <link rel="stylesheet" href="{% static 'core/css/templatemo-comparto.css' %}"> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title> SketchSynth | Controlnet-Canny Edge Detection </title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="bg-gray-900 p-4 text-white">
+                {% block messages %}
+                {% if messages %}
+                <div>
+                    <ul>
+                        {% for message in messages %}
+                        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong>{{message}}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                {% endblock %}
+                <div class="flex items-center justify-between">
+                    <h1 class="text-lg font-bold"> sketch-synth | by mashud-ul-hassan </h1>
+                    <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded">
+                        {% if user.is_authenticated %}
+                        Hello, {{ user.username }}!
+                        {% endif %}
+                    </button>
+                    <!-- <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded"> beta </button> -->
+                </div>
+                <p class="text-sm mt-1"> Modify images using canny edge detection </p>
+                <div class="flex items-center space-x-2 text-xs mt-2">
+                    <span class="bg-green-500 text-white py-1 px-2 rounded-full"> tools used 🚀</span>
+                    <span> Python > Django > StableDiffusion </span>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="p-2">
+                        <form method="post" id="uploadForm" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form|crispy }}
+                            
+                            <input id="submitBtn" type="submit" class="hidden">
+                        </form>
+                    </div>
+                    <div class="p-2">
+                        <div style="text-align:center ; vertical-align:middle;">
+                            <!-- <img id="newLoadingGif" src="https://loading.io/assets/img/c/icon/sunny-light.svg"
+                                style="display: none;" class="tm-img-responsive"> -->
+                            <!-- <div id="newLoadingGif"
+                                style="width:100%;height:0;padding-bottom:73%;position:relative; display: none;"><iframe
+                                    src="https://giphy.com/embed/3y0oCOkdKKRi0" width="100%" height="100%"
+                                    style="position:absolute" frameBorder="0" allowFullScreen></iframe>
+                            </div> -->
+                            <div id="newLoadingGif"
+                                style="display: none;width:100%;height:0;padding-bottom:178%;position:relative;"><iframe
+                                    src="https://giphy.com/embed/mvBTlPWs0W7zaFw9Hw" width="100%" height="100%"
+                                    style="position:absolute" frameBorder="0" class="giphy-embed"
+                                    allowFullScreen></iframe></div>
+
+                            <div class="row imageCont" id="imageCont">
+                                <!-- output will be displayed here after form submission -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-between items-center">
+                        <div>
+                            <button id="resetForm"
+                                class="py-2 px-4 text-sm font-bold text-gray-700 bg-gray-300 rounded hover:bg-gray-400">Reset</button>
+                            <label for="submitBtn"
+                                class="py-2 px-4 text-sm font-bold text-white bg-blue-500 rounded hover:bg-blue-600 ml-2">Submit</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-xs"> <span style="float: right;"> Brought to you by Mashud Ul Hassan |
+                        <a class="text-blue-600 hover:underline" href="/accounts/logout"> Log Out </a>
+                    </span>
+                </div> <!-- Rest of the content... -->
+            </div>
+            <footer class="mt-8 text-gray-600 text-xs text-center"> <a href="/" class="hover:underline"> Home </a> | <a
+                    class="hover:underline"> About </a> | <a class="hover:underline"> Docs </a> |
+                <!-- More links... -->
+            </footer>
+        </div>
+</body>
+
+<script type="text/javascript">
+    const uploadForm = document.getElementById("uploadForm");
+    // const submitBtn = document.getElementById("submitBtn");
+    const loadingGif = document.getElementById("newLoadingGif");
+    const resetForm = document.getElementById("resetForm");
+
+    resetForm.addEventListener("click", function (e) {
+        document.documentElement.scrollTop = 0;
+        document.forms[0].reset()
+        const container = document.querySelector(".imageCont");
+        container.innerHTML = '';
+    });
+
+    uploadForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        document.documentElement.scrollTop = 170;
+
+        loadingGif.style.display = "block";
+
+        const formData = new FormData(this);
+
+        fetch("process_upload/", {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const genImgContainer = document.querySelector(".imageCont");
+                loadingGif.style.display = "none";
+                if (data.output_url) {
+
+                    const html = `<div class="col-md-4 my-2">
+                    <img width="340" src="${data.output_url}" class="img-responsive">
+                </div>`;
+                    genImgContainer.innerHTML = html;
+                } else if (data.error) {
+                    const html = `<div class="col-md-4 my-2">
+                    <h3>${data.error} </h3>
+                </div>`;
+                    genImgContainer.innerHTML = html;
+                }
+
+            })
+            .catch(error => {
+                console.log(error);
+                console.error('Errorrr:', error);
+                const container = document.querySelector(".imageCont");
+                container.innerHTML = '<p>An error occurred. Please try again.</p>';
+            });
+    });
+</script>
+
+</html>
