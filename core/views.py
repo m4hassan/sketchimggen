@@ -1,17 +1,23 @@
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-from django.urls import reverse
 
 import replicate
-from .forms import ImageUploadForm
+from .forms import *
 from .firebase import FIREBASE_CONFIG, fb_storage
+from .stablediffusionApi import run_sd_api
 import os
 
 os.environ["REPLICATE_API_TOKEN"] = "r8_Qh7fOYo4OpiJKo5wkKKFSLwLaj9DBtM2e9Nfo"
 
 def sd_view(request):
-    form = ImageUploadForm()
+
+    if request.method == 'POST':
+        form = SdForm(request.POST, request.FILES)
+        if form.is_valid():
+            image_instance = request.FILES['init_img']
+            prompt = request.POST[]
+    form = SdForm()
     return render(request, 'core/stablediffusion.html', {'form': form})
 
 

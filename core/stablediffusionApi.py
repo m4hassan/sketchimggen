@@ -1,7 +1,7 @@
 import requests
 import json
 
-def sd_Api():
+def run_sd_api():
 
     url = "https://stablediffusionapi.com/api/v3/img2img"
     key = 'ZdOA7vtrmg20hLElq4wXnjt8theMOrJSGKXlkH2dLRYDtwI6beT942gIedCr'
