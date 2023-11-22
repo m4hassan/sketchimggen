@@ -3,7 +3,7 @@ import json
 
 def run_sd_api(file_url, prompt, negative_prompt, image_size, samples, num_inference_steps, safety_checker, enhance_prompt, guidance_scale, strength):
 
-    url = "https://stablediffusionapi.com/api/v3/img2img"
+    # url = "https://stablediffusionapi.com/api/v3/img2img"
     key = 'ZdOA7vtrmg20hLElq4wXnjt8theMOrJSGKXlkH2dLRYDtwI6beT942gIedCr'
     payload = json.dumps({
     "key": key,
@@ -39,6 +39,3 @@ def run_sd_api(file_url, prompt, negative_prompt, image_size, samples, num_infer
     
     except requests.RequestException as e:
         print(f"Request Failed: {e}")
-
-
-# sd_Api()

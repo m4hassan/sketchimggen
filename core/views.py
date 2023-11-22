@@ -10,6 +10,9 @@ import os
 
 os.environ["REPLICATE_API_TOKEN"] = "r8_Qh7fOYo4OpiJKo5wkKKFSLwLaj9DBtM2e9Nfo"
 
+def home(request):
+    return render(request, 'switch/index.html')
+
 def sdIndex(request):
     form = SdForm()
     return render(request, 'core/stablediffusion.html', {'form': form})
@@ -48,7 +51,7 @@ def sd_view(request):
 
 
 @login_required(login_url='/accounts/login/')
-def index(request):
+def replicateIndex(request):
     form = ImageUploadForm()
     return render(request, 'core/index.html', {'form': form})
 
