@@ -58,7 +58,7 @@
                         <form method="post" id="uploadForm" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form|crispy }}
-                            
+
                             <input id="submitBtn" type="submit" class="hidden">
                         </form>
                     </div>
@@ -118,14 +118,13 @@
 
     uploadForm.addEventListener("submit", function (e) {
         e.preventDefault();
-
         document.documentElement.scrollTop = 170;
-
+        const container = document.querySelector(".imageCont");
+        container.innerHTML = '';
         loadingGif.style.display = "block";
-
         const formData = new FormData(this);
 
-        fetch("process_upload/", {
+        fetch("/stablediffuse/", {
             method: "POST",
             body: formData
         })
@@ -136,14 +135,14 @@
                 loadingGif.style.display = "none";
                 if (data.output_url) {
 
-                    const html = `<div class="col-md-4 my-2">
-                    <img width="340" src="${data.output_url}" class="img-responsive">
-                </div>`;
+                    const html = `<div class="col-lg-12 my-5">
+                    <img src="${data.output_url}" class="img-responsive">
+                    </div>`;
                     genImgContainer.innerHTML = html;
                 } else if (data.error) {
-                    const html = `<div class="col-md-4 my-2">
-                    <h3>${data.error} </h3>
-                </div>`;
+                    const html = `<div class="col-lg-12 my-5">
+                    <h2>Error: ${data.error} </h2>
+                    </div>`;
                     genImgContainer.innerHTML = html;
                 }
 
