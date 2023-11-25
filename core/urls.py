@@ -6,5 +6,5 @@ urlpatterns = [
   path("replicateindex/", views.replicateIndex, name="replicateIndex"),
   path("sdindex/", views.sdIndex, name="sdIndex"),
   path("stablediffuse/", views.sd_view, name="sd_view"),
-  path("run_replicate/", views.process_upload, name="run_replicate")
+  path("replicateApi/", views.replicate_view, name="run_replicate")
 ]

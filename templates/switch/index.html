@@ -12,7 +12,8 @@
 </head>
 <body class="is-boxed has-animations">
     <div class="body-wrap boxed-container">
-        <header class="site-header">
+        {% include "switch/customnavbar.html" %}
+        <!-- <header class="site-header">
             <div class="container">
                 <div class="site-header-inner">
                     <div class="brand header-brand">
@@ -23,19 +24,25 @@
                             </a>
                         </h1>
                     </div>
+                    <div class="header-links">
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Work</a></li>
+                            <li><a href="#">About</a></li>
+                            <li><a href="#">Contact</a></li>
+                    </div>
                 </div>
             </div>
-        </header>
+        </header> -->
 
         <main>
             <section class="hero">
                 <div class="container">
                     <div class="hero-inner">
 						<div class="hero-copy">
-	                        <h1 class="hero-title mt-0">Landing template for startups</h1>
+	                        <h1 class="hero-title mt-0">sketch-synth</h1>
 	                        <p class="hero-paragraph">Our landing page template works on all devices, so you only have to set it up once, and get beautiful results forever.</p>
 	                        <div class="hero-cta">
-								<a class="button button-primary" href="#">Buy it now</a>
+								<a class="button button-primary" href="{% url 'sdIndex' %}">Check it out</a>
 								<div class="lights-toggle">
 									<input id="lights-toggle" type="checkbox" name="lights-toggle" class="switch" checked="checked">
 									<label for="lights-toggle" class="text-xs"><span>Turn me <span class="label-text">dark</span></span></label>

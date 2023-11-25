@@ -1,5 +1,4 @@
 import pyrebase
-import os
 
 FIREBASE_CONFIG = {
     "apiKey": "AIzaSyCQwpqUF4Rr68gg9fvc7RucD7ZC9utJw_Y",
@@ -17,5 +16,5 @@ def fb_storage(config, file):
   storage = fire_base.storage()
   storage.child('file/'+ file.name).put(file)
   download_url = storage.child('file/'+file.name).get_url(None)
-  print("url: ",download_url)
+  print("Input Image URL: ",download_url)
   return download_url

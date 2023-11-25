@@ -33,8 +33,9 @@ DEBUG = True
 
 CSRF_TRUSTED_ORIGINS = [
     "https://chatgptimggen.mashudhassandev.repl.co/",
-    "http://chatgptimggen.mashudhassandev.repl.co/"
+    "http://*"
 ]
+
 CORS_ALLOW_CREDENTIALS = True
 
 ALLOWED_HOSTS = ['*']
