@@ -31,10 +31,7 @@ if SECRET_KEY is None:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://chatgptimggen.mashudhassandev.repl.co/",
-    "http://*"
-]
+CSRF_TRUSTED_ORIGINS = ["http://*", "https://*" ]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -54,7 +51,6 @@ INSTALLED_APPS = [
     'core',
     'crispy_forms',
     'crispy_bootstrap5',
-    # 'django_inlinecss',
     'user_management',
     'allauth',
     'allauth.account',
