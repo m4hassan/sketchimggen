@@ -17,7 +17,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="bg-gray-100">
+<body style="background-color:#182538">
     <div class="container mx-auto p-4">
         <div class="bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="bg-gray-900 p-4 text-white">
@@ -36,10 +36,10 @@
                     <span> Python > Django > StableDiffusion </span>
                 </div>
             </div>
-            <div class="p-4">
+            <div class="p-4" style="background-color: #5b6678;">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="p-2">
-                        <form method="post" id="uploadForm" enctype="multipart/form-data">
+                        <form class="text-gray-100" method="post" id="uploadForm" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{ form|crispy }}
 
@@ -57,19 +57,19 @@
                             </div> -->
                             <div id="newLoadingGif"
                                 style="display: none;width:100%;height:0;padding-bottom:178%;position:relative;">
-                                <iframe
-                                    src="https://giphy.com/embed/mvBTlPWs0W7zaFw9Hw" width="100%" height="100%"
-                                    style="position:absolute" frameBorder="0" class="giphy-embed"
-                                    allowFullScreen>
+                                <iframe src="https://giphy.com/embed/mvBTlPWs0W7zaFw9Hw" width="100%" height="100%"
+                                    style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen>
                                 </iframe>
                             </div>
 
                             <div class="row imageCont" id="imageCont">
                                 <!-- output will be displayed here after form submission -->
+                                <div class="col-lg-12 my-5">
+                                    <img src="{% static 'dist/images/heroimage1.png' %}"
+                                        class="img-responsive">
+                                </div>
                             </div>
-                            <div class="col-lg-12 my-5">
-                                <img src="https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/0-abd97a0b-6ac6-4961-95cd-b693746f0bfa.png" class="img-responsive">
-                            </div>
+                            
                         </div>
                     </div>
                     <div class="mt-6 flex justify-between items-center">
@@ -81,13 +81,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-xs"> <span style="float: right;"> Brought to you by Mashud Ul Hassan |
-                        <a class="text-blue-600 hover:underline" href="/accounts/logout"> Log Out </a>
+                <div class="text-xs text-white"> <span style="float: right;"> Brought to you by Mashud Ul Hassan |
+                        <span class="badge badge-danger"><a href="/accounts/logout"> Log Out
+                        </a></span>
+                        
                     </span>
+
                 </div> <!-- Rest of the content... -->
             </div>
-            <footer class="mt-8 text-gray-600 text-xs text-center"> <a href="/" class="hover:underline"> Home </a> | <a
-                    href="https://github.com/m4hassan/sketchimggen/tree/SD-Api-check" class="hover:underline"> About </a> | <a class="hover:underline"> Docs </a> |
+            <footer class="text-gray-100 text-xs text-center bg-gray-900 py-4">
+                <a href="/" class="hover:underline"> Home </a> |
+                <a href="https://github.com/m4hassan/sketchimggen/tree/SD-Api-check" class="hover:underline"> About </a>
+                | <a class="hover:underline"> Docs </a> |
                 <!-- More links... -->
             </footer>
         </div>
@@ -122,7 +127,7 @@
             .then(data => {
                 console.log(data);
                 const genImgContainer = document.querySelector(".imageCont");
-                
+
                 if (data.output_url) {
 
                     const html = `<div class="col-lg-12 my-5">
