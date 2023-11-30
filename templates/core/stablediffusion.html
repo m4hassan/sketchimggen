@@ -7,9 +7,8 @@
 <head>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta charset="utf-8">
-    <!-- <link rel="stylesheet" type="text/css" href="{% static 'core/css/newmain.css' %}"> -->
-    <!-- <link rel="stylesheet" type="text/css" href="{% static 'core/css/mainform.css' %}"> -->
-    <!-- <link rel="stylesheet" href="{% static 'core/css/templatemo-comparto.css' %}"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="{% static 'account/css/style.css' %}"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <title> SketchSynth | Controlnet-Canny Edge Detection </title>
@@ -64,10 +63,14 @@
 
                             <div class="row imageCont" id="imageCont">
                                 <!-- output will be displayed here after form submission -->
+                                <div class="hero-media-container">
                                 <div class="col-lg-12 my-5">
                                     <img src="{% static 'dist/images/heroimage1.png' %}"
                                         class="img-responsive">
+                                        <p class=" text-gray-100 text-lg mb-0 mt-2">Transform your sketch into a stunning, lifelike masterpiece. Fill the form on the left to get started!</p>
                                 </div>
+                                </div>
+                                
                             </div>
                             
                         </div>
@@ -91,7 +94,7 @@
             </div>
             <footer class="text-gray-100 text-xs text-center bg-gray-900 py-4">
                 <a href="/" class="hover:underline"> Home </a> |
-                <a href="https://github.com/m4hassan/sketchimggen/tree/SD-Api-check" class="hover:underline"> About </a>
+                <a href="https://github.com/m4hassan/sketchimggen" class="hover:underline"> About </a>
                 | <a class="hover:underline"> Docs </a> |
                 <!-- More links... -->
             </footer>
@@ -131,7 +134,8 @@
                 if (data.output_url) {
 
                     const html = `<div class="col-lg-12 my-5">
-                    <img src="${data.output_url}" class="img-responsive">
+                    <img src="${data.output_url}" class="img-responsive" alt="Please click the download button to fetch the generated image">
+                    <button class="btn" style="color:whitesmoke"><a target="_blank" download='output' href="${data.output_url}"><i class="fa fa-download"></i> Download</a></button>
                     </div>`;
                     loadingGif.style.display = "none";
                     genImgContainer.innerHTML = html;

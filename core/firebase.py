@@ -16,5 +16,5 @@ def fb_storage(config, file):
   storage = fire_base.storage()
   storage.child('file/'+ file.name).put(file)
   download_url = storage.child('file/'+file.name).get_url(None)
-  print("Input Image URL: ",download_url)
+  print("<== Input Image URL: ==>",download_url)
   return download_url

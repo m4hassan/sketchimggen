@@ -71,31 +71,38 @@ def fetch_generated_result(key, request_id):
 
 def control_net_canny(file_url, prompt, negative_prompt, image_size, samples, num_inference_steps, safety_checker, enhance_prompt, guidance_scale, strength):
 
-    negative_prompt = "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), (text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck), "
+    prompt = "a mugshot of a model, ultra high resolution, 4K image, rim lighting, studio lighting"
+    # "(8k, RAW photo, highest quality, ultra realistic face), a hyperrealistic portrait of an Indian girl, detailed skin, skin pores"
+    negative_prompt = "cartoon, illustration, 3d render, cgi, anime, drawing, sketch, painting, animation, low resolution, low quality, low detail, disfigured, bad anatomy"
+    # "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing), (text, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, cloned face, disfigured, gross proportions, malformed limbs, long neck), "
     url = "https://stablediffusionapi.com/api/v5/controlnet"
-    # key = "ZdOA7vtrmg20hLElq4wXnjt8theMOrJSGKXlkH2dLRYDtwI6beT942gIedCr" #mashudhassandev api key
-    key = "QvoLwzfxnp0geSBtODlTnP99ptJ5zvFD5dkbToRUnyhIBYGnaN0E9mFNewsu" #Nyalee.Littles@FreeMailOnline.us
+    key = "ZdOA7vtrmg20hLElq4wXnjt8theMOrJSGKXlkH2dLRYDtwI6beT942gIedCr" #mashudhassandev api key
+    # key = "QvoLwzfxnp0geSBtODlTnP99ptJ5zvFD5dkbToRUnyhIBYGnaN0E9mFNewsu" #Nyalee.Littles@FreeMailOnline.us
+    # key = "4tsoJ119lQtez4dZckNjTpUYe3Tcd8YZlRFHVUNr8en7H4ZCNe8bnMluGKNk" #Jaxsun.Difiore@FreeMailOnline.us
+    # key = "e861fWoMaDnwLq2VDCpM7kiOLFAcLbdhjGwoAgv8zpbCFJOgNBB4JkVPWOSb"
     payload = json.dumps({
     "key": key,
-    "controlnet_model": "canny",
+    "controlnet_model": "canny,scribble,lineart",
     "controlnet_type": "canny",
     "model_id": "midjourney",
     "auto_hint": "yes",
     "guess_mode": "no",
     "prompt": prompt,
     # "a model mugshot, ultra high resolution, 4K image"
-    "negative_prompt": negative_prompt + "cartoon, illustration, 3d render, cgi, anime, drawing, grayscale, sketch, painting, animation, low resolution, low detail",
+    "negative_prompt": negative_prompt,
+    # + "cartoon, illustration, anime, drawing, grayscale",
     "init_image": file_url,
     "mask_image": None,
     "width": "512",
     "height": "512",
     "samples": "1",
     "scheduler": "UniPCMultistepScheduler",
-    "num_inference_steps": "30",
+    "num_inference_steps": "20",
     "safety_checker": "no",
     "enhance_prompt": "yes",
     "guidance_scale": 7.5,
-    "strength": 0.55,
+    # "controlnet_conditioning_scale": 3,
+    "strength": 1,
     "lora_model": None,
     "tomesd": "yes",
     "use_karras_sigmas": "yes",
@@ -116,16 +123,24 @@ def control_net_canny(file_url, prompt, negative_prompt, image_size, samples, nu
 
         json_response = response.json()
         output = json_response.get('output', '')
-
+        future_link = json_response.get('future_links','')
         if output:
             print("<== Generated Image Url: ==>", output)
             return output
+        
+        elif future_link:
+            wait_time = json_response.get('eta', 0) + 15  # Adding 10 seconds buffer
+            print(f"Waiting for {wait_time} seconds before fetching result...")
+            time.sleep(wait_time)
+            print("<== Fetched Image Url: ==>", future_link)
+            return future_link
+        
         else:
             print("Output is empty. Trying to fetch result...")
             print("<== JsonResponse ==> ", json_response)
             fetch_result_id = json_response.get('id', '')
             if fetch_result_id:
-                wait_time = json_response.get('eta', 0) + 10  # Adding 10 seconds buffer
+                wait_time = json_response.get('eta', 0) + 15  # Adding 10 seconds buffer
                 print(f"Waiting for {wait_time} seconds before fetching result...")
                 time.sleep(wait_time)
                 return fetch_generated_result(key, fetch_result_id)
