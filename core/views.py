@@ -38,6 +38,10 @@ def sd_view(request):
             file_url = fb_storage(FIREBASE_CONFIG, image_instance)
             try:
                 response = control_net_canny(file_url, prompt, negative_prompt, image_size, samples, num_inference_steps, safety_checker, enhance_prompt, guidance_scale, strength)
+                error_msg = response.get('message', '')
+                if error_msg:
+                    return JsonResponse({"error": error_msg})
+                
                 return JsonResponse({'output_url': response})
             
             except Exception as e:

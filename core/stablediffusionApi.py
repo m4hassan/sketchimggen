@@ -43,31 +43,6 @@ def run_sd_api(file_url, prompt, negative_prompt, image_size, samples, num_infer
         print(f"Request Failed: {e}")
 
 
-def fetch_generated_result(key, request_id):
-    try:
-        url = 'https://stablediffusionapi.com/api/v3/fetch'
-        payload = json.dumps({
-        "key": key,
-        "request_id": request_id
-        })
-
-        headers = {
-        'Content-Type': 'application/json'
-        }
-        response = requests.request("POST", url, headers=headers, data=payload)
-        if response.status_code == 200:
-            json_response = response.json()
-            output = json_response.get('output', [])[0]
-            if output:
-                print("<== Fetched Image Url: ==>", output)
-                return output
-            else:
-                print("Error: Fetched output is empty.")
-        else:
-            print(f"Error: {response.status_code} - {response.text}")
-    except Exception as e:
-        print(f"Exception: {e}")
-
 
 def control_net_canny(file_url, prompt, negative_prompt, image_size, samples, num_inference_steps, safety_checker, enhance_prompt, guidance_scale, strength):
 
@@ -124,28 +99,32 @@ def control_net_canny(file_url, prompt, negative_prompt, image_size, samples, nu
         json_response = response.json()
         output = json_response.get('output', '')
         future_link = json_response.get('future_links','')
+        error_msg = json_response.get('message', '')
+        # fetch_result_id = json_response.get('id', '')
+
         if output:
-            print("<== Generated Image Url: ==>", output)
+            print("\n", "<== Generated Image Url: ==>", output)
             return output
         
         elif future_link:
-            wait_time = json_response.get('eta', 0) + 15  # Adding 10 seconds buffer
-            print(f"Waiting for {wait_time} seconds before fetching result...")
+            wait_time = json_response.get('eta', 0) + 15  # Adding 15 seconds buffer
+            print("\n", f"Waiting for {wait_time} seconds before fetching result...")
             time.sleep(wait_time)
-            print("<== Fetched Image Url: ==>", future_link)
+            print("\n","<== Fetched Image Url: ==>", future_link)
             return future_link
         
-        else:
-            print("Output is empty. Trying to fetch result...")
-            print("<== JsonResponse ==> ", json_response)
-            fetch_result_id = json_response.get('id', '')
-            if fetch_result_id:
-                wait_time = json_response.get('eta', 0) + 15  # Adding 10 seconds buffer
-                print(f"Waiting for {wait_time} seconds before fetching result...")
-                time.sleep(wait_time)
-                return fetch_generated_result(key, fetch_result_id)
-            else:
-                print("Error: fetch_result ID is not available in the response.")
+        elif error_msg:
+            print("\n", "Output is empty. Trying to fetch result...")
+            pretty_json_response = json.dumps(json_response, indent=3)
+            print("\n", "<== JsonResponse ==> ", "\n", pretty_json_response)
+            print("\n", "<== Error: ==> ", "\n", error_msg)
+            return json_response
+            
+        # elif fetch_result_id:
+        #     wait_time = json_response.get('eta', 0) + 15  # Adding 10 seconds buffer
+        #     print(f"Waiting for {wait_time} seconds before fetching result...")
+        #     time.sleep(wait_time)
+        #     return fetch_generated_result(key, fetch_result_id)
     
     except requests.RequestException as e:
         print(f"Request Failed: {e}")
@@ -170,3 +149,28 @@ def run_replicate(file_url, prompt, num_samples, image_resolution, low_threshold
                               })
 
     return response
+
+def fetch_generated_result(key, request_id):
+    try:
+        url = 'https://stablediffusionapi.com/api/v3/fetch'
+        payload = json.dumps({
+        "key": key,
+        "request_id": request_id
+        })
+
+        headers = {
+        'Content-Type': 'application/json'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+        if response.status_code == 200:
+            json_response = response.json()
+            output = json_response.get('output', [])[0]
+            if output:
+                print("<== Fetched Image Url: ==>", output)
+                return output
+            else:
+                print("Error: Fetched output is empty.")
+        else:
+            print(f"Error: {response.status_code} - {response.text}")
+    except Exception as e:
+        print(f"Exception: {e}")

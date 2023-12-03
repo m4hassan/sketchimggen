@@ -47,30 +47,26 @@
                     </div>
                     <div class="p-2">
                         <div style="text-align:center ; vertical-align:middle;">
-                            <!-- <img id="newLoadingGif" src="https://loading.io/assets/img/c/icon/sunny-light.svg"
-                                style="display: none;" class="tm-img-responsive"> -->
                             <!-- <div id="newLoadingGif"
                                 style="width:100%;height:0;padding-bottom:73%;position:relative; display: none;"><iframe
                                     src="https://giphy.com/embed/3y0oCOkdKKRi0" width="100%" height="100%"
                                     style="position:absolute" frameBorder="0" allowFullScreen></iframe>
                             </div> -->
-                            <div id="newLoadingGif"
-                                style="display: none;width:100%;height:0;padding-bottom:178%;position:relative;">
-                                <iframe src="https://giphy.com/embed/mvBTlPWs0W7zaFw9Hw" width="100%" height="100%"
+                            <div id="newLoadingGif" style="display:none; width:100%;height:0;padding-bottom:178%;position:relative;">
+                                <!-- <iframe src="https://giphy.com/embed/mvBTlPWs0W7zaFw9Hw" width="100%" height="100%"
                                     style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen>
-                                </iframe>
+                                </iframe> -->
+                                <img id="newLoadingGif" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWVjcnlpMDhvbzR3dm1yM3IyMTl4NTA4Mmoyc2lyNDZzaTJyeG12aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/OQruJkvbAZYPDsCoGW/giphy.gif" alt="">
                             </div>
 
                             <div class="row imageCont" id="imageCont">
                                 <!-- output will be displayed here after form submission -->
                                 <div class="hero-media-container">
-                                <div class="col-lg-12 my-5">
-                                    <img src="{% static 'dist/images/heroimage1.png' %}"
-                                        class="img-responsive">
+                                    <div class="col-lg-12 my-5">
+                                        <img src="{% static 'dist/images/heroimage1.png' %}" class="img-responsive">
                                         <p class=" text-gray-100 text-lg mb-0 mt-2">Transform your sketch into a stunning, lifelike masterpiece. Fill the form on the left to get started!</p>
-                                </div>
-                                </div>
-                                
+                                    </div>
+                                </div> 
                             </div>
                             
                         </div>
@@ -84,11 +80,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="text-xs text-white"> <span style="float: right;"> Brought to you by Mashud Ul Hassan |
-                        <span class="badge badge-danger"><a href="/accounts/logout"> Log Out
-                        </a></span>
-                        
-                    </span>
+                <div class="text-xs text-white"> <span style="float: right;"> Brought to you by Mashud Ul Hassan | <a href="/accounts/logout"> Log Out
+                </a>
 
                 </div> <!-- Rest of the content... -->
             </div>
@@ -139,17 +132,21 @@
                     </div>`;
                     loadingGif.style.display = "none";
                     genImgContainer.innerHTML = html;
+
                 } else if (data.error) {
+                    console.log(data.error)
                     const html = `<div class="col-lg-12 my-5">
-                    <h2>Error: ${data.error} </h2>
+                    <img src="https://casts.ask.fm/images/errors/account-disabled.gif" alt="Out of cash much?">
+                    <h2 class="my-4" style="color:whitesmoke">Error: ${data.error} </h2>
                     </div>`;
+                    loadingGif.style.display = "none";
                     genImgContainer.innerHTML = html;
                 }
 
             })
             .catch(error => {
                 console.log(error);
-                console.error('Errorrr:', error);
+                console.error('js error: ', error);
                 const container = document.querySelector(".imageCont");
                 container.innerHTML = '<p>An error occurred. Please try again.</p>';
             });
