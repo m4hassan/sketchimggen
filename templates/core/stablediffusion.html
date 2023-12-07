@@ -24,7 +24,7 @@
                     <h1 class="text-lg font-bold"> sketch-synth | by mashud-ul-hassan </h1>
                     <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded">
                         {% if user.is_authenticated %}
-                        Hello, {{ user.username }}!
+                        <a href="{% url 'profile-view' user.id %}">Hello, {{ user.username }}!</a>
                         {% endif %}
                     </button>
                     <!-- <button class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-1 px-4 rounded"> beta </button> -->

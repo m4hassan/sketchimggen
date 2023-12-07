@@ -1,14 +1,97 @@
 <!DOCTYPE html>
 {% load static %}
+{% load crispy_forms_tags %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{% static 'userprofile/style.css' %}">
     <title>Profile</title>
 </head>
-<body>
-    <h1>Hello {{ user.username }} from the user profile</h1>
-    <h1>{{ user.email }}</h1>
-    <h1>{{ user.i }}</h1>
+
+<body style="background-color:#182538">
+    <div class="container">
+        <div class="main-body">
+
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="main-breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'sdIndex' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:void(0)">User</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">User Profile</li>
+                </ol>
+            </nav>
+            <!-- /Breadcrumb -->
+
+            <div class="row gutters-sm justify-content-around">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                
+                                {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="Admin" class="rounded-circle" width="150">
+                                {% else %}
+                                <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="admin"
+                                    class="rounded-circle" width="150">
+                                {% endif %}
+                                <div class="mt-3" style="text-decoration: whitesmoke">
+                                    <h4>{{ user.username}}</h4>
+                                    <p class="text-gray-100 mb-1">{{ user.profile.email }}</p>
+                                    <p class="text-gray-100 font-size-sm">{{ user.profile.phone_number }}</p>
+                                    <button class="btn btn-primary">Follow</button>
+                                    <button class="btn btn-outline-primary"><a href="{% url 'account_logout' %}">Log Out</a></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <form action="" method="post">
+                                {{ updateform|crispy}}
+                            </form>
+                            <hr color="white">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <a class="btn btn-info " target="__blank"
+                                        href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+
+                <!-- Gallery code -->
+                <div class="container">
+                    <div class="row row-cols-3">
+                        {% for image in images_list %}
+                            <div class="col"> <img src="{{ image.output_img }}" class="rounded-square"
+                                width="150"></div>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <hr color="white">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <a class="btn btn-info " target="__blank"
+                            href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 </body>
+
 </html>
