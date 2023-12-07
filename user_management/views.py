@@ -5,7 +5,17 @@ from django.contrib.auth.models import User
 # Create your views here.
 
 @login_required(login_url="accounts/login/")
-def profile_view(request, username):
-    userprofile = User.objects.get(username=username)
+def profile_view(request, id):
+    userprofile = get_object_or_404(User, id=id)
+    if request.user != userprofile:
+        return redirect('/sdindex')
+    
+    update_form = UserProfileUpdateForm(instance=userprofile.profile)
+    images_list = GenerationDetails.objects.filter(user=userprofile)
+    print(images_list)
     print(userprofile)
-    return render(request, "userprofile/profile.html", {"user": userprofile})
+
+    context =  {"userprofile": userprofile,
+                "updateform": update_form,
+                "images_list": images_list}
+    return render(request, "userprofile/profile.html", context)
