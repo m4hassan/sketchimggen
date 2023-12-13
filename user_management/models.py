@@ -30,5 +30,5 @@ class GenerationDetails(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     input_img = models.URLField()
     response_json = models.JSONField()
-    output_img = models.URLField()
+    output_img = models.URLField(null=True)
     generated_at = models.DateTimeField(auto_now_add=True)

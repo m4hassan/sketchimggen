@@ -53,10 +53,7 @@
                                     style="position:absolute" frameBorder="0" allowFullScreen></iframe>
                             </div> -->
                             <div id="newLoadingGif" style="display:none; width:100%;height:0;padding-bottom:178%;position:relative;">
-                                <!-- <iframe src="https://giphy.com/embed/mvBTlPWs0W7zaFw9Hw" width="100%" height="100%"
-                                    style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen>
-                                </iframe> -->
-                                <img id="newLoadingGif" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWVjcnlpMDhvbzR3dm1yM3IyMTl4NTA4Mmoyc2lyNDZzaTJyeG12aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/OQruJkvbAZYPDsCoGW/giphy.gif" alt="">
+                                <img class="mx-auto d-block" src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbWVjcnlpMDhvbzR3dm1yM3IyMTl4NTA4Mmoyc2lyNDZzaTJyeG12aCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/OQruJkvbAZYPDsCoGW/giphy.gif" alt="">
                             </div>
 
                             <div class="row imageCont" id="imageCont">
@@ -104,7 +101,12 @@
         document.documentElement.scrollTop = 0;
         document.forms[0].reset()
         const container = document.querySelector(".imageCont");
-        container.innerHTML = '';
+        container.innerHTML = `<div class="hero-media-container">
+                                    <div class="col-lg-12 my-5">
+                                        <img src="{% static 'dist/images/heroimage1.png' %}" class="img-responsive">
+                                        <p class=" text-gray-100 text-lg mb-0 mt-2">Transform your sketch into a stunning, lifelike masterpiece. Fill the form on the left to get started!</p>
+                                    </div>
+                                </div>`;
     });
 
     uploadForm.addEventListener("submit", function (e) {
@@ -127,8 +129,9 @@
                 if (data.output_url) {
 
                     const html = `<div class="col-lg-12 my-5">
-                    <img src="${data.output_url}" class="img-responsive" alt="Please click the download button to fetch the generated image">
+                    <img id="refreshdiv" src="${data.output_url}" class="img-responsive" alt="Please click the download button to fetch the generated image">
                     <button class="btn" style="color:whitesmoke"><a target="_blank" download='output' href="${data.output_url}"><i class="fa fa-download"></i> Download</a></button>
+                    <button id="refresh" class="btn" style="color:whitesmoke"><i class="fa fa-refresh"></i> Refresh </button>
                     </div>`;
                     loadingGif.style.display = "none";
                     genImgContainer.innerHTML = html;
@@ -136,7 +139,7 @@
                 } else if (data.error) {
                     console.log(data.error)
                     const html = `<div class="col-lg-12 my-5">
-                    <img src="https://casts.ask.fm/images/errors/account-disabled.gif" alt="Out of cash much?">
+                    <img class="mx-auto d-block" src="https://casts.ask.fm/images/errors/account-disabled.gif" alt="Out of cash much?">
                     <h2 class="my-4" style="color:whitesmoke">Error: ${data.error} </h2>
                     </div>`;
                     loadingGif.style.display = "none";
@@ -152,5 +155,12 @@
             });
     });
 </script>
+<script>
+    $(document).ready(function() {
+      $("#refresh").click(function() {
+        $("#refreshdiv").load(window.location.href + " #refreshdiv");
+      });
+    });
+  </script>
 
 </html>

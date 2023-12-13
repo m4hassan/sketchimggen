@@ -46,51 +46,57 @@ def run_sd_api(file_url, prompt, negative_prompt, image_size, samples, num_infer
 
 def control_net_canny(file_url, prompt, negative_prompt, image_size, samples, num_inference_steps, safety_checker, enhance_prompt, guidance_scale, strength):
 
-    prompt = "a mugshot of a model, ultra high resolution, 4K image, rim lighting, studio lighting"
+    prompt = "photograph of a wise man, RAW photo, subject, 8k uhd, dslr, soft lighting, high quality, film grain, Fujifilm XT3 , ultra high resolution, 4K image, professional photo"
+    # DSLR photo, neg = render, artwork
     # "(8k, RAW photo, highest quality, ultra realistic face), a hyperrealistic portrait of an Indian girl, detailed skin, skin pores"
+    
     negative_prompt = "cartoon, illustration, 3d render, cgi, anime, drawing, sketch, painting, animation, low resolution, low quality, low detail, disfigured, bad anatomy"
     # "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing), (text, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, cloned face, disfigured, gross proportions, malformed limbs, long neck), "
+    
     url = "https://stablediffusionapi.com/api/v5/controlnet"
-    key = "ZdOA7vtrmg20hLElq4wXnjt8theMOrJSGKXlkH2dLRYDtwI6beT942gIedCr" #mashudhassandev api key
+    
+    # key = "ZdOA7vtrmg20hLElq4wXnjt8theMOrJSGKXlkH2dLRYDtwI6beT942gIedCr" #mashudhassandev api key
     # key = "QvoLwzfxnp0geSBtODlTnP99ptJ5zvFD5dkbToRUnyhIBYGnaN0E9mFNewsu" #Nyalee.Littles@FreeMailOnline.us
     # key = "4tsoJ119lQtez4dZckNjTpUYe3Tcd8YZlRFHVUNr8en7H4ZCNe8bnMluGKNk" #Jaxsun.Difiore@FreeMailOnline.us
     # key = "e861fWoMaDnwLq2VDCpM7kiOLFAcLbdhjGwoAgv8zpbCFJOgNBB4JkVPWOSb"
+    # key = "eoduyjVxbm8zD79ECglSXxCVu9IYJBlJJBChDUXImZBk9xsOV1NSsOuCh3Mu" #b089486574809b@crankymonkey.info
+
     payload = json.dumps({
-    "key": key,
-    "controlnet_model": "canny,scribble,lineart",
-    "controlnet_type": "canny",
-    "model_id": "midjourney",
-    "auto_hint": "yes",
-    "guess_mode": "no",
-    "prompt": prompt,
-    # "a model mugshot, ultra high resolution, 4K image"
-    "negative_prompt": negative_prompt,
-    # + "cartoon, illustration, anime, drawing, grayscale",
-    "init_image": file_url,
-    "mask_image": None,
-    "width": "512",
-    "height": "512",
-    "samples": "1",
-    "scheduler": "UniPCMultistepScheduler",
-    "num_inference_steps": "20",
-    "safety_checker": "no",
-    "enhance_prompt": "yes",
-    "guidance_scale": 7.5,
-    # "controlnet_conditioning_scale": 3,
-    "strength": 1,
-    "lora_model": None,
-    "tomesd": "yes",
-    "use_karras_sigmas": "yes",
-    "vae": None,
-    "lora_strength": None,
-    "embeddings_model": None,
-    "seed": None,
-    "webhook": None,
-    "track_id": None
+            "key": key,
+            "controlnet_model": "canny,scribble,lineart",
+            "controlnet_type": "canny",
+            "model_id": "midjourney",
+            "auto_hint": "yes",
+            "guess_mode": "no",
+            "prompt": prompt,
+            # "a model mugshot, ultra high resolution, 4K image"
+            "negative_prompt": negative_prompt,
+            # + "cartoon, illustration, anime, drawing, grayscale",
+            "init_image": file_url,
+            "mask_image": None,
+            "width": "512",
+            "height": "512",
+            "samples": "1",
+            "scheduler": "UniPCMultistepScheduler",
+            "num_inference_steps": "20",
+            "safety_checker": "no",
+            "enhance_prompt": "yes",
+            "guidance_scale": 7.5,
+            # "controlnet_conditioning_scale": 3,
+            "strength": 1,
+            "lora_model": None,
+            "tomesd": "yes",
+            "use_karras_sigmas": "yes",
+            "vae": None,
+            "lora_strength": None,
+            "embeddings_model": None,
+            "seed": None,
+            "webhook": None,
+            "track_id": None
     })
 
     headers = {
-    'Content-Type': 'application/json'
+        'Content-Type': 'application/json'
     }
 
     try:
@@ -103,22 +109,26 @@ def control_net_canny(file_url, prompt, negative_prompt, image_size, samples, nu
         # fetch_result_id = json_response.get('id', '')
 
         if output:
-            print("\n", "<== Generated Image Url: ==>", output)
-            return output
+            pretty_json_response = json.dumps(json_response, indent=3)
+            print("\n", "<== JsonResponse ==> ", "\n", pretty_json_response)
+            print("\n", "<== Generated Image Url: ==>", "\n", output)
+            return output, json_response
         
         elif future_link:
             wait_time = json_response.get('eta', 0) + 15  # Adding 15 seconds buffer
+            pretty_json_response = json.dumps(json_response, indent=3)
+            print("\n", "<== JsonResponse ==> ", "\n", pretty_json_response)
             print("\n", f"Waiting for {wait_time} seconds before fetching result...")
             time.sleep(wait_time)
-            print("\n","<== Fetched Image Url: ==>", future_link)
-            return future_link
+            print("\n","<== Fetched Image Url: ==>", "\n", future_link)
+            return future_link[0], json_response
         
         elif error_msg:
             print("\n", "Output is empty. Trying to fetch result...")
             pretty_json_response = json.dumps(json_response, indent=3)
             print("\n", "<== JsonResponse ==> ", "\n", pretty_json_response)
             print("\n", "<== Error: ==> ", "\n", error_msg)
-            return json_response
+            return None, json_response
             
         # elif fetch_result_id:
         #     wait_time = json_response.get('eta', 0) + 15  # Adding 10 seconds buffer

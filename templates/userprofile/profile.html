@@ -53,9 +53,14 @@
                 <div class="col-md-8">
                     <div class="card mb-3">
                         <div class="card-body">
-                            <form action="" method="post">
-                                {{ updateform|crispy}}
-                            </form>
+                            <div class="container">
+                                <div class="row row-cols-3">
+                                    {% for image in images_list %}
+                                        <div class="col"> <img src="{{ image.output_img }}" class="rounded-square"
+                                            width="150"></div>
+                                    {% endfor %}
+                                </div>
+                            </div>
                             <hr color="white">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -64,27 +69,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-body">
-
-                <!-- Gallery code -->
-                <div class="container">
-                    <div class="row row-cols-3">
-                        {% for image in images_list %}
-                            <div class="col"> <img src="{{ image.output_img }}" class="rounded-square"
-                                width="150"></div>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <hr color="white">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <a class="btn btn-info " target="__blank"
-                            href="https://www.bootdey.com/snippets/view/profile-edit-data-and-skills">Edit</a>
                     </div>
                 </div>
             </div>

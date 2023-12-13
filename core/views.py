@@ -4,10 +4,11 @@ from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 
 from .forms import *
+from user_management.models import GenerationDetails
 from .firebase import FIREBASE_CONFIG, fb_storage
 from .stablediffusionApi import run_sd_api, control_net_canny
 
-os.environ["REPLICATE_API_TOKEN"] = "r8_Qh7fOYo4OpiJKo5wkKKFSLwLaj9DBtM2e9Nfo"
+# os.environ["REPLICATE_API_TOKEN"] = "r8_Qh7fOYo4OpiJKo5wkKKFSLwLaj9DBtM2e9Nfo"
 
 def home(request):
     return render(request, 'switch/index.html')
@@ -37,12 +38,18 @@ def sd_view(request):
 
             file_url = fb_storage(FIREBASE_CONFIG, image_instance)
             try:
-                response = control_net_canny(file_url, prompt, negative_prompt, image_size, samples, num_inference_steps, safety_checker, enhance_prompt, guidance_scale, strength)
-                error_msg = response.get('message', '')
+                output_url, json_response = control_net_canny(file_url, prompt, negative_prompt, image_size, samples, num_inference_steps, safety_checker, enhance_prompt, guidance_scale, strength)
+                error_msg = json_response.get('message', '')
+
+                
+
                 if error_msg:
+                    print("Response Error: ", error_msg)
+                    GenerationDetails.objects.create(user=request.user, input_img=file_url, output_img="", response_json=json_response)
                     return JsonResponse({"error": error_msg})
                 
-                return JsonResponse({'output_url': response})
+                GenerationDetails.objects.create(user=request.user, input_img=file_url, output_img=output_url, response_json=json_response)
+                return JsonResponse({'output_url': output_url})
             
             except Exception as e:
                 print("<== cmd exception ==>", e)

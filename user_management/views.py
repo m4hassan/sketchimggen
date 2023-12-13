@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from .forms import UserProfileUpdateForm
 # Create your views here.
 
-@login_required(login_url="accounts/login/")
+@login_required(login_url="/")
 def profile_view(request, id):
     userprofile = get_object_or_404(User, id=id)
     if request.user != userprofile:
@@ -19,4 +19,4 @@ def profile_view(request, id):
     context =  {"userprofile": userprofile,
                 "updateform": update_form,
                 "images_list": images_list}
-    return render(request, "userprofile/profile.html", context)
+    return render(request, "userprofile/resume.html", context)
