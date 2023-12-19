@@ -46,11 +46,11 @@ def run_sd_api(file_url, prompt, negative_prompt, image_size, samples, num_infer
 
 def control_net_canny(file_url, prompt, negative_prompt, image_size, samples, num_inference_steps, safety_checker, enhance_prompt, guidance_scale, strength):
 
-    prompt = "photograph of a wise man, RAW photo, subject, 8k uhd, dslr, soft lighting, high quality, film grain, Fujifilm XT3 , ultra high resolution, 4K image, professional photo"
+    prompt = "photograph of an Indian man, blue eyes, RAW photo, high quality, film grain, Fujifilm XT3 , ultra high resolution, professional photo"
     # DSLR photo, neg = render, artwork
     # "(8k, RAW photo, highest quality, ultra realistic face), a hyperrealistic portrait of an Indian girl, detailed skin, skin pores"
     
-    negative_prompt = "cartoon, illustration, 3d render, cgi, anime, drawing, sketch, painting, animation, low resolution, low quality, low detail, disfigured, bad anatomy"
+    negative_prompt = "pencil sketch, cartoon, illustration, 3d render, cgi, anime, drawing, sketch, painting, animation, low resolution, low quality, low detail, disfigured, bad anatomy"
     # "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing), (text, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, cloned face, disfigured, gross proportions, malformed limbs, long neck), "
     
     url = "https://stablediffusionapi.com/api/v5/controlnet"
@@ -60,10 +60,11 @@ def control_net_canny(file_url, prompt, negative_prompt, image_size, samples, nu
     # key = "4tsoJ119lQtez4dZckNjTpUYe3Tcd8YZlRFHVUNr8en7H4ZCNe8bnMluGKNk" #Jaxsun.Difiore@FreeMailOnline.us
     # key = "e861fWoMaDnwLq2VDCpM7kiOLFAcLbdhjGwoAgv8zpbCFJOgNBB4JkVPWOSb"
     # key = "eoduyjVxbm8zD79ECglSXxCVu9IYJBlJJBChDUXImZBk9xsOV1NSsOuCh3Mu" #b089486574809b@crankymonkey.info
+    key = "LEtuni8ofaczhSJGl8LIz82qgAIvYYt31F85Pw1xBw2sDv9WGJtU6KpVrEnJ" #notloverofpubg@gmail.com
 
     payload = json.dumps({
             "key": key,
-            "controlnet_model": "canny,scribble,lineart",
+            "controlnet_model": "canny",
             "controlnet_type": "canny",
             "model_id": "midjourney",
             "auto_hint": "yes",
@@ -78,7 +79,7 @@ def control_net_canny(file_url, prompt, negative_prompt, image_size, samples, nu
             "height": "512",
             "samples": "1",
             "scheduler": "UniPCMultistepScheduler",
-            "num_inference_steps": "20",
+            "num_inference_steps": "25",
             "safety_checker": "no",
             "enhance_prompt": "yes",
             "guidance_scale": 7.5,

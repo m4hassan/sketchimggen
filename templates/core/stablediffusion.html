@@ -128,13 +128,24 @@
 
                 if (data.output_url) {
 
-                    const html = `<div class="col-lg-12 my-5">
-                    <img id="refreshdiv" src="${data.output_url}" class="img-responsive" alt="Please click the download button to fetch the generated image">
-                    <button class="btn" style="color:whitesmoke"><a target="_blank" download='output' href="${data.output_url}"><i class="fa fa-download"></i> Download</a></button>
-                    <button id="refresh" class="btn" style="color:whitesmoke"><i class="fa fa-refresh"></i> Refresh </button>
+                    const html = `<div class="col-lg-12 my-5" id="refreshdiv">
+                        <img id="outputImage" src="${data.output_url}" class="img-responsive" alt="Please click the download button to fetch the generated image">
+                        <button class="btn" style="color:whitesmoke"><a target="_blank" download='output' href="${data.output_url}"><i class="fa fa-download"></i> Download</a></button>
+                        <button id="refresh" class="btn" style="color:whitesmoke"><a href="#"><i class="fa fa-refresh"></i> Refresh </a></button>
                     </div>`;
+
                     loadingGif.style.display = "none";
                     genImgContainer.innerHTML = html;
+
+                    const outputImage = document.getElementById('outputImage');
+                    const refreshButton = document.getElementById('refresh');
+
+                    refreshButton.addEventListener('click', () => {
+                        // Set a timestamp as a query parameter to force a reload
+                        outputImage.src = `${data.output_url}?t=${Date.now()}`;
+                    });
+
+                    
 
                 } else if (data.error) {
                     console.log(data.error)
